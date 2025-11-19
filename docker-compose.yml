@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  lang-speed-check:
+    build: .
+    container_name: lang-speed-check
+    ports:
+      - "3000:3000"
+    volumes:
+      # Mount for development (optional - comment out for production)
+      # - ./public:/app/public
+      # - ./server.js:/app/server.js
+
+      # Temp directory for code execution
+      - lang-speed-temp:/app/temp
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    restart: unless-stopped
+
+    # Security settings
+    security_opt:
+      - no-new-privileges:true
+
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+volumes:
+  lang-speed-temp:
